@@ -186,8 +186,10 @@ const scrollPreviewTo = (element) => {
   window.scrollTo(0, element.getBoundingClientRect().top + window.scrollY);
 };
 
-if (["city", "beach", "mountains"].includes(previewType)) {
+async function startPreviewTour() {
   findRecommendations(previewType);
+  const recommendationImages = Array.from(document.querySelectorAll("#recommendations img"));
+  await Promise.all(recommendationImages.map((img) => img.decode().catch(() => {})));
   if (previewView === "recommendations") {
     scrollPreviewTo(document.getElementById("recommendations"));
   } else if (previewView === "map") {
@@ -212,19 +214,25 @@ if (["city", "beach", "mountains"].includes(previewType)) {
   } else if (previewView === "destination-menu") {
     document.querySelector(".nav-item.dropdown .dropdown-toggle")?.click();
   }
+}
+
+if (["city", "beach", "mountains"].includes(previewType)) {
+  window.addEventListener("load", startPreviewTour, { once: true });
 } else {
   // SWEET ALERT ON PAGE LOAD
-  swal({
-    title: "Where do you want to go?",
-    icon: "assets/images/destination-types.png",
-    padding: '3rem',
-    buttons: {
-      city: { text: "City", value: "city" },
-      beach: { text: "Beach", value: "beach" },
-      mountains: { text: "Mountains", value: "mountains" },
-    },
-    closeOnClickOutside: false,
-  }).then((value) => {
-    findRecommendations(value);
-  });
+  window.addEventListener("load", () => {
+    swal({
+      title: "Where do you want to go?",
+      icon: "assets/images/destination-types.png",
+      padding: '3rem',
+      buttons: {
+        city: { text: "City", value: "city" },
+        beach: { text: "Beach", value: "beach" },
+        mountains: { text: "Mountains", value: "mountains" },
+      },
+      closeOnClickOutside: false,
+    }).then((value) => {
+      findRecommendations(value);
+    });
+  }, { once: true });
 }
