@@ -1,54 +1,3 @@
-// An optional tour query makes the key prototype states directly shareable.
-// Without a query string, visitors still see the original destination picker.
-const previewParams = new URLSearchParams(window.location.search);
-const previewType = previewParams.get("tour");
-const previewView = previewParams.get("view");
-
-if (["city", "beach", "mountains"].includes(previewType)) {
-  window.setTimeout(() => {
-    findRecommendations(previewType);
-    if (previewView === "recommendations") {
-      document.getElementById("recommendations").scrollIntoView();
-    } else if (previewView === "map") {
-      document.getElementById("map").scrollIntoView();
-    } else if (previewView === "map-detail") {
-      const place = findPlaceByName(previewParams.get("place") || "Bass Lake");
-      if (place) {
-        const position = ol.proj.fromLonLat([place.long, place.lat]);
-        view.setCenter(position);
-        view.setZoom(7);
-        popup.setPosition(position);
-        new bootstrap.Popover(document.querySelector("#popup"), {
-          animation: false,
-          container: document.querySelector("#popup"),
-          content: `<img src="${place.img}" alt="${place.name}" class="img-fluid" style="min-width:300px;" />`,
-          html: true,
-          placement: "bottom",
-          title: `<h3 class="h5 text-center m-0">${place.name}</h3>`,
-        }).show();
-        document.getElementById("map").scrollIntoView();
-      }
-    } else if (previewView === "destination-menu") {
-      document.querySelector(".nav-item.dropdown .dropdown-toggle")?.click();
-    }
-  }, 0);
-} else {
-  // SWEET ALERT ON PAGE LOAD
-  swal({
-    title: "Where do you want to go?",
-    icon: "assets/images/destination-types.png",
-    padding: '3rem',
-    buttons: {
-      city: { text: "City", value: "city" },
-      beach: { text: "Beach", value: "beach" },
-      mountains: { text: "Mountains", value: "mountains" },
-    },
-    closeOnClickOutside: false,
-  }).then((value) => {
-    findRecommendations(value);
-  });
-}
-
 const vectorSource = new ol.source.Vector();
 const vectorLayer = new ol.layer.Vector({
   source: vectorSource,
@@ -225,4 +174,53 @@ function addMarkerToMap(place) {
   });
   vectorSource.addFeature(newPoint);
   newPoint.setStyle(iconStyle);
+}
+
+// An optional tour query makes the key prototype states directly shareable.
+// Without a query string, visitors still see the original destination picker.
+const previewParams = new URLSearchParams(window.location.search);
+const previewType = previewParams.get("tour");
+const previewView = previewParams.get("view");
+
+if (["city", "beach", "mountains"].includes(previewType)) {
+  findRecommendations(previewType);
+  if (previewView === "recommendations") {
+    document.getElementById("recommendations").scrollIntoView();
+  } else if (previewView === "map") {
+    document.getElementById("map").scrollIntoView();
+  } else if (previewView === "map-detail") {
+    const place = findPlaceByName(previewParams.get("place") || "Bass Lake");
+    if (place) {
+      const position = ol.proj.fromLonLat([place.long, place.lat]);
+      view.setCenter(position);
+      view.setZoom(7);
+      popup.setPosition(position);
+      new bootstrap.Popover(document.querySelector("#popup"), {
+        animation: false,
+        container: document.querySelector("#popup"),
+        content: `<img src="${place.img}" alt="${place.name}" class="img-fluid" style="min-width:300px;" />`,
+        html: true,
+        placement: "bottom",
+        title: `<h3 class="h5 text-center m-0">${place.name}</h3>`,
+      }).show();
+      document.getElementById("map").scrollIntoView();
+    }
+  } else if (previewView === "destination-menu") {
+    document.querySelector(".nav-item.dropdown .dropdown-toggle")?.click();
+  }
+} else {
+  // SWEET ALERT ON PAGE LOAD
+  swal({
+    title: "Where do you want to go?",
+    icon: "assets/images/destination-types.png",
+    padding: '3rem',
+    buttons: {
+      city: { text: "City", value: "city" },
+      beach: { text: "Beach", value: "beach" },
+      mountains: { text: "Mountains", value: "mountains" },
+    },
+    closeOnClickOutside: false,
+  }).then((value) => {
+    findRecommendations(value);
+  });
 }
