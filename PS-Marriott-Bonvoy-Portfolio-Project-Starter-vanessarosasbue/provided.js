@@ -185,9 +185,9 @@ const previewView = previewParams.get("view");
 if (["city", "beach", "mountains"].includes(previewType)) {
   findRecommendations(previewType);
   if (previewView === "recommendations") {
-    document.getElementById("recommendations").scrollIntoView();
+    document.getElementById("recommendations").scrollIntoView({ block: "start" });
   } else if (previewView === "map") {
-    document.getElementById("map").scrollIntoView();
+    document.getElementById("map").scrollIntoView({ block: "start" });
   } else if (previewView === "map-detail") {
     const place = findPlaceByName(previewParams.get("place") || "Bass Lake");
     if (place) {
@@ -203,7 +203,7 @@ if (["city", "beach", "mountains"].includes(previewType)) {
         placement: "bottom",
         title: `<h3 class="h5 text-center m-0">${place.name}</h3>`,
       }).show();
-      document.getElementById("map").scrollIntoView();
+      document.getElementById("map").scrollIntoView({ block: "start" });
     }
   } else if (previewView === "destination-menu") {
     document.querySelector(".nav-item.dropdown .dropdown-toggle")?.click();
