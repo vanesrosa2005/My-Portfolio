@@ -181,13 +181,17 @@ function addMarkerToMap(place) {
 const previewParams = new URLSearchParams(window.location.search);
 const previewType = previewParams.get("tour");
 const previewView = previewParams.get("view");
+const scrollPreviewTo = (element) => {
+  document.documentElement.style.scrollBehavior = "auto";
+  window.scrollTo(0, element.getBoundingClientRect().top + window.scrollY);
+};
 
 if (["city", "beach", "mountains"].includes(previewType)) {
   findRecommendations(previewType);
   if (previewView === "recommendations") {
-    document.getElementById("recommendations").scrollIntoView({ block: "start" });
+    scrollPreviewTo(document.getElementById("recommendations"));
   } else if (previewView === "map") {
-    document.getElementById("map").scrollIntoView({ block: "start" });
+    scrollPreviewTo(document.getElementById("map"));
   } else if (previewView === "map-detail") {
     const place = findPlaceByName(previewParams.get("place") || "Bass Lake");
     if (place) {
@@ -203,7 +207,7 @@ if (["city", "beach", "mountains"].includes(previewType)) {
         placement: "bottom",
         title: `<h3 class="h5 text-center m-0">${place.name}</h3>`,
       }).show();
-      document.getElementById("map").scrollIntoView({ block: "start" });
+      scrollPreviewTo(document.getElementById("map"));
     }
   } else if (previewView === "destination-menu") {
     document.querySelector(".nav-item.dropdown .dropdown-toggle")?.click();
