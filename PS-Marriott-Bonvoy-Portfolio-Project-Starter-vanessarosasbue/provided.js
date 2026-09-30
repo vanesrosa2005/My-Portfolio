@@ -5,8 +5,8 @@ const previewType = previewParams.get("tour");
 const previewView = previewParams.get("view");
 
 if (["city", "beach", "mountains"].includes(previewType)) {
-  findRecommendations(previewType);
   window.setTimeout(() => {
+    findRecommendations(previewType);
     if (previewView === "recommendations") {
       document.getElementById("recommendations").scrollIntoView();
     } else if (previewView === "map") {
