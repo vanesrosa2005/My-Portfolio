@@ -193,6 +193,7 @@ async function startPreviewTour() {
   if (previewView === "recommendations") {
     scrollPreviewTo(document.getElementById("recommendations"));
   } else if (previewView === "map") {
+    document.body.style.paddingBottom = "900px";
     scrollPreviewTo(document.getElementById("map"));
   } else if (previewView === "map-detail") {
     const place = findPlaceByName(previewParams.get("place") || "Bass Lake");
@@ -209,6 +210,7 @@ async function startPreviewTour() {
         placement: "bottom",
         title: `<h3 class="h5 text-center m-0">${place.name}</h3>`,
       }).show();
+      document.body.style.paddingBottom = "900px";
       scrollPreviewTo(document.getElementById("map"));
     }
   } else if (previewView === "destination-menu") {
