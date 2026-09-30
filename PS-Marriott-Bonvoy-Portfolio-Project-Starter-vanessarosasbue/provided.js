@@ -31,7 +31,7 @@ if (["city", "beach", "mountains"].includes(previewType)) {
     } else if (previewView === "destination-menu") {
       document.querySelector(".nav-item.dropdown .dropdown-toggle")?.click();
     }
-  }, 650);
+  }, 0);
 } else {
   // SWEET ALERT ON PAGE LOAD
   swal({
